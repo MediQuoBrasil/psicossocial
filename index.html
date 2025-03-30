@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <!-- Viewport para responsividade -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Elaborador - Avaliação psicossocial</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* Estilos gerais */
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #491E9C;
+      color: #202124;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .container {
+      width: 100%;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+    /* Caixa branca para título e instrução */
+    .header-box {
+      background: white;
+      border-radius: 8px;
+      padding: 10px 20px;
+      box-sizing: border-box;
+      margin-bottom: 16px;
+      width: 100%;
+      text-align: center;
+    }
+    .header-box h1 {
+      margin: 0 0 16px; /* Espaço para separar o título da instrução */
+      font-size: 18pt;
+      font-weight: 700;
+      color: #491E9C;
+    }
+    .header-box p {
+      margin: 0;
+      font-size: 14px;
+      color: #202124;
+      text-align: justify;
+    }
+    /* Input */
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid rgba(73, 30, 156, 0.3);
+      border-radius: 4px;
+      font-size: 16px;
+      box-sizing: border-box;
+      transition: border-color 0.3s ease;
+      margin-bottom: 16px;
+    }
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #491E9C;
+      box-shadow: 0 0 0 2px rgba(73, 30, 156, 0.1);
+    }
+    /* Botões com efeito animado */
+    button {
+      background-image: linear-gradient(45deg, #ffffff, #c0a4e3);
+      color: #491E9C;
+      font-size: 16px;
+      padding: 15px 25px;
+      border-radius: 8px;
+      text-transform: uppercase;
+      font-weight: 700;
+      box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      border: 2px solid #491E9C;
+      background-size: 200% 200%;
+      animation: gradientMovement 3s ease infinite;
+      cursor: pointer;
+      display: block;
+      margin: 16px auto;
+    }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0px 7px 20px rgba(0, 0, 0, 0.15);
+    }
+    /* Spinner e barra de progresso */
+    .spinner {
+      border: 4px solid rgba(255,255,255,0.3);
+      border-top: 4px solid #ffffff;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 10px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .progress-container {
+      width: 100%;
+      background-color: #d9d2e9; /* Fundo da barra: roxa clara */
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+    .progress-bar {
+      height: 20px;
+      width: 0%;
+      background-color: #ffffff; /* Progresso: branco */
+      text-align: center;
+      color: #000000; /* Porcentagem: preta */
+      line-height: 20px;
+      transition: width 0.3s ease;
+    }
+    /* Porcentagem de progresso ao lado do spinner */
+    #progressText {
+      color: #ffffff;
+      vertical-align: middle;
+      font-size: 14px;
+    }
+    /* Animação do gradiente dos botões */
+    @keyframes gradientMovement {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    /* Estilo para textos menores (mensagens, etc) */
+    .small-text {
+      font-size: 12px;
+      text-align: center;
+    }
+    /* Bloco de mensagem com fundo branco (somente o texto) */
+    .success-output {
+      background: white;
+      padding: 16px;
+      border-radius: 8px;
+      text-align: center;
+      color: #202124;
+      margin: 16px auto;
+      max-width: 768px;
+    }
+    .success-output p {
+      font-weight: bold;
+      margin: 8px 0;
+    }
+    /* Estilo para a mensagem de sucesso do popup (copiar link) */
+    .success-message {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      color: #491E9C;
+      padding: 20px 30px;
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      font-size: 16px;
+      font-weight: bold;
+      z-index: 1000;
+      text-align: center;
+    }
+    /* Ajustes para mobile */
+    @media (max-width:600px) {
+      .container {
+        padding: 10px;
+      }
+      .header-box, .success-output {
+        padding: 10px;
+      }
+      input[type="text"] {
+        font-size: 14px;
+        padding: 10px;
+      }
+      button {
+        font-size: 14px;
+        padding: 12px 20px;
+      }
+      .success-output p {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header-box">
+      <h1>Elaborador - Avaliação psicossocial</h1>
+      <p>Informe o nome da sua empresa no campo abaixo: (Ex: Mediquo Saúde Conectada Ltda, escrever apenas: MediQuo)</p>
+    </div>
+    <input id="companyName" type="text" placeholder="Nome da sua empresa">
+    <button id="createBtn" onclick="createForm()">Criar Formulário</button>
+    <hr>
+    <div id="output" class="small-text"></div>
+    
+    <!-- Container para exibir o spinner e a barra de progresso -->
+    <div id="progressSection" style="display:none;">
+      <div class="spinner" id="spinner"></div>
+      <span id="progressText">0%</span>
+      <div class="progress-container">
+        <div class="progress-bar" id="progressBar">0%</div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    var progressInterval;
+    var startTime;
+    
+    function startProgress() {
+      startTime = new Date().getTime();
+      document.getElementById("progressSection").style.display = "block";
+      progressInterval = setInterval(function() {
+        var elapsed = (new Date().getTime() - startTime) / 1000; // em segundos
+        var computed = Math.floor((elapsed / 46) * 99);
+        if (computed > 99) computed = 99;
+        updateProgress(computed);
+      }, 300);
+    }
+    
+    function updateProgress(value) {
+      document.getElementById("progressText").textContent = value + "%";
+      document.getElementById("progressBar").style.width = value + "%";
+      document.getElementById("progressBar").textContent = value + "%";
+    }
+    
+    function stopProgress() {
+      clearInterval(progressInterval);
+      updateProgress(100);
+    }
+    
+    // Função para exibir uma mensagem de sucesso do popup (cópia do link)
+    function showSuccessMessage(message) {
+      var msgDiv = document.createElement('div');
+      msgDiv.className = 'success-message';
+      msgDiv.textContent = message;
+      document.body.appendChild(msgDiv);
+      setTimeout(function() {
+        msgDiv.remove();
+      }, 3000);
+    }
+    
+    // Função para copiar o link para a área de transferência
+    function copyLink(link) {
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(link)
+          .then(function() {
+            showSuccessMessage("Link copiado com sucesso!");
+          })
+          .catch(function(err) {
+            showSuccessMessage("Erro ao copiar o link: " + err);
+          });
+      } else {
+        var textArea = document.createElement("textarea");
+        textArea.value = link;
+        textArea.style.position = "fixed";
+        textArea.style.top = "-9999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+          document.execCommand('copy');
+          showSuccessMessage("Link copiado com sucesso!");
+        } catch (err) {
+          showSuccessMessage("Erro ao copiar o link: " + err);
+        }
+        document.body.removeChild(textArea);
+      }
+    }
+    
+    // Função que chama a função do Apps Script e gerencia o progresso
+    function createForm() {
+      document.getElementById("createBtn").disabled = true;
+      document.getElementById("output").innerHTML = "";
+      startProgress();
+      var companyName = document.getElementById("companyName").value;
+      google.script.run
+        .withSuccessHandler(function(url) {
+          stopProgress();
+          // A mensagem de sucesso com fundo branco abrange somente o texto
+          var html = "<div class='success-output'>" +
+                     "<p>Formulário criado com sucesso!</p>" +
+                     "<p>Clique no botão abaixo para copiar o link (<strong>" + url + "</strong>) que os colaboradores irão acessar</p>" +
+                     "</div>" +
+                     "<button class='copy-btn' onclick='copyLink(\"" + url + "\")'>COPIAR LINK</button>";
+          document.getElementById("output").innerHTML = html;
+          document.getElementById("createBtn").disabled = false;
+        })
+        .withFailureHandler(function(error) {
+          stopProgress();
+          document.getElementById("output").innerHTML =
+            "Erro ao criar formulário: " + error.message;
+          document.getElementById("createBtn").disabled = false;
+        })
+        .createPsychosocialRiskForm(companyName);
+    }
+  </script>
+</body>
+</html>
