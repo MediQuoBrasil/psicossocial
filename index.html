@@ -1,694 +1,419 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html>
 <head>
+  <base target="_top">
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-  <title>Elaborador - Avaliação psicossocial</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Avaliação Psicossocial</title>
   <style>
-    /* Estilos gerais */
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Roboto', Arial, sans-serif;
       margin: 0;
-      padding: 10px;
-      background-color: #491E9C;
-      color: #202124;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-      box-sizing: border-box;
+      padding: 20px;
+      background-color: #f5f5f5;
+      color: #333;
     }
+    
     .container {
-      width: 100%;
-      max-width: 768px;
+      max-width: 800px;
       margin: 0 auto;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    /* Caixa branca para título e instrução */
-    .header-box {
-      background: white;
+      background-color: #fff;
+      padding: 30px;
       border-radius: 8px;
-      padding: 15px;
-      box-sizing: border-box;
-      margin-bottom: 16px;
-      width: 100%;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    h1 {
+      color: #2c3e50;
       text-align: center;
+      margin-bottom: 30px;
     }
-    .header-box h1 {
-      margin: 0 0 16px;
-      font-size: 18pt;
-      font-weight: 700;
-      color: #491E9C;
+    
+    .step {
+      display: none;
+      animation: fadeIn 0.5s;
     }
-    .header-box p {
-      margin: 0;
-      font-size: 14px;
-      color: #202124;
-      text-align: justify;
+    
+    .step.active {
+      display: block;
     }
-    /* Input */
-    input[type="text"], input[type="email"], input[type="number"] {
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    
+    input[type="text"], 
+    input[type="email"],
+    input[type="number"] {
       width: 100%;
-      padding: 12px;
-      border: 1px solid rgba(73, 30, 156, 0.3);
+      padding: 10px;
+      border: 1px solid #ddd;
       border-radius: 4px;
       font-size: 16px;
-      box-sizing: border-box;
-      transition: border-color 0.3s ease;
-      margin-bottom: 16px;
     }
-    input[type="text"]:focus, input[type="email"]:focus, input[type="number"]:focus {
-      outline: none;
-      border-color: #491E9C;
-      box-shadow: 0 0 0 2px rgba(73, 30, 156, 0.1);
-    }
-    /* Label para os inputs */
-    .input-label {
-      display: block;
-      margin-bottom: 6px;
-      font-size: 14px;
-      font-weight: 500;
-      color: white;
-    }
-    /* Botões com efeito animado */
+    
     button {
-      background-image: linear-gradient(45deg, #ffffff, #c0a4e3);
-      color: #491E9C;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 12px 20px;
       font-size: 16px;
-      padding: 15px 25px;
-      border-radius: 8px;
-      text-transform: uppercase;
-      font-weight: 700;
-      box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s ease;
-      border: 2px solid #491E9C;
-      background-size: 200% 200%;
-      animation: gradientMovement 3s ease infinite;
       cursor: pointer;
-      display: block;
-      margin: 16px auto;
-      width: 100%;
-      max-width: 300px;
+      transition: background-color 0.3s;
     }
+    
     button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0px 7px 20px rgba(0, 0, 0, 0.15);
+      background-color: #2980b9;
     }
-    button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
+    
+    button.secondary {
+      background-color: #95a5a6;
     }
-    /* Spinner e barra de progresso */
-    .spinner {
-      border: 4px solid rgba(255,255,255,0.3);
-      border-top: 4px solid #ffffff;
-      border-radius: 50%;
-      width: 24px;
-      height: 24px;
-      animation: spin 1s linear infinite;
+    
+    button.secondary:hover {
+      background-color: #7f8c8d;
+    }
+    
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+    
+    .email-list {
+      margin-top: 20px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 10px;
+      min-height: 100px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    
+    .email-tag {
       display: inline-block;
-      vertical-align: middle;
-      margin-right: 10px;
+      background-color: #e1f0fa;
+      border-radius: 4px;
+      padding: 5px 10px;
+      margin: 5px;
+      font-size: 14px;
     }
+    
+    .email-tag button {
+      background: none;
+      border: none;
+      color: #e74c3c;
+      cursor: pointer;
+      font-size: 14px;
+      margin-left: 5px;
+      padding: 0;
+    }
+    
+    .success-message {
+      text-align: center;
+      color: #27ae60;
+      font-size: 18px;
+      margin: 20px 0;
+    }
+    
+    .loading {
+      text-align: center;
+      margin: 20px 0;
+    }
+    
+    .spinner {
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      border-top: 4px solid #3498db;
+      width: 30px;
+      height: 30px;
+      margin: 0 auto 15px;
+      animation: spin 1s linear infinite;
+    }
+    
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-    .progress-container {
-      width: 100%;
-      background-color: #d9d2e9;
+    
+    .link-box {
+      background-color: #f1f9ff;
+      border: 1px solid #d1e9ff;
       border-radius: 4px;
-      overflow: hidden;
-      margin-top: 10px;
-    }
-    .progress-bar {
-      height: 20px;
-      width: 0%;
-      background-color: #ffffff;
-      text-align: center;
-      color: #000000;
-      line-height: 20px;
-      transition: width 0.3s ease;
-    }
-    /* Porcentagem de progresso ao lado do spinner */
-    #progressText {
-      color: #ffffff;
-      vertical-align: middle;
-      font-size: 14px;
-    }
-    /* Animação do gradiente dos botões */
-    @keyframes gradientMovement {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    /* Estilo para textos menores (mensagens, etc) */
-    .small-text {
-      font-size: 12px;
-      text-align: center;
-      width: 100%;
-    }
-    /* Bloco de mensagem com fundo branco (somente o texto) */
-    .success-output {
-      background: white;
-      padding: 16px;
-      border-radius: 8px;
-      text-align: center;
-      color: #202124;
-      margin: 16px auto;
-      width: 100%;
-      box-sizing: border-box;
-    }
-    .success-output p {
-      font-weight: bold;
-      margin: 8px 0;
-      word-wrap: break-word;
-    }
-    /* Estilo para a mensagem de sucesso do popup (copiar link) */
-    .success-message {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: white;
-      color: #491E9C;
-      padding: 20px 30px;
-      border-radius: 8px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-      font-size: 16px;
-      font-weight: bold;
-      z-index: 1000;
-      text-align: center;
-      width: 80%;
-      max-width: 300px;
-      box-sizing: border-box;
-    }
-    hr {
-      width: 100%;
-      border: 0;
-      height: 1px;
-      background: rgba(255,255,255,0.3);
-      margin: 20px 0;
-    }
-    
-    /* Estilos para o dashboard do gestor */
-    .dashboard {
-      background: white;
-      border-radius: 8px;
-      padding: 20px;
-      margin-top: 20px;
-      width: 100%;
-      box-sizing: border-box;
-      display: none;
-    }
-    .dashboard-title {
-      font-size: 16pt;
-      font-weight: 600;
-      color: #491E9C;
-      margin-bottom: 15px;
-      text-align: center;
-    }
-    .stats-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      margin-bottom: 20px;
-    }
-    .stat-box {
-      background: #f8f9fa;
-      border-radius: 6px;
       padding: 15px;
-      width: 48%;
-      margin-bottom: 15px;
-      box-sizing: border-box;
-      text-align: center;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      margin: 15px 0;
+      word-break: break-all;
     }
-    .stat-title {
-      font-size: 12px;
-      color: #666;
-      margin-bottom: 5px;
-    }
-    .stat-value {
-      font-size: 22px;
-      font-weight: 600;
-      color: #491E9C;
-    }
-    .responses-container {
-      max-height: 300px;
-      overflow-y: auto;
-      margin-bottom: 20px;
-      border: 1px solid #e0e0e0;
-      border-radius: 6px;
-    }
-    .response-item {
-      padding: 12px;
-      border-bottom: 1px solid #e0e0e0;
-      display: flex;
-      justify-content: space-between;
-    }
-    .response-item:last-child {
-      border-bottom: none;
-    }
-    .response-name {
-      font-weight: 500;
-    }
-    .response-email {
-      color: #666;
+    
+    .error {
+      color: #e74c3c;
       font-size: 14px;
-    }
-    .tab-container {
-      display: flex;
-      border-bottom: 1px solid #e0e0e0;
-      margin-bottom: 15px;
-    }
-    .tab {
-      padding: 10px 15px;
-      cursor: pointer;
-      background: #f1f1f1;
-      border-radius: 6px 6px 0 0;
-      margin-right: 5px;
-      transition: all 0.2s ease;
-    }
-    .tab.active {
-      background: #491E9C;
-      color: white;
-    }
-    
-    /* Progress circle for responses */
-    .response-progress {
-      position: relative;
-      width: 150px;
-      height: 150px;
-      margin: 0 auto 20px;
-    }
-    .progress-circle {
-      transform: rotate(-90deg);
-      width: 100%;
-      height: 100%;
-    }
-    .progress-circle-bg {
-      fill: none;
-      stroke: #e0e0e0;
-      stroke-width: 10;
-    }
-    .progress-circle-value {
-      fill: none;
-      stroke: #491E9C;
-      stroke-width: 10;
-      stroke-linecap: round;
-      transition: stroke-dashoffset 0.5s ease;
-    }
-    .progress-text {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 24px;
-      font-weight: 600;
-      color: #491E9C;
-    }
-    
-    /* Ajustes para mobile */
-    @media (max-width:600px) {
-      body {
-        padding: 10px;
-      }
-      .container {
-        width: 100%;
-        padding: 0;
-      }
-      .header-box {
-        padding: 12px;
-      }
-      .header-box h1 {
-        font-size: 16pt;
-      }
-      .header-box p {
-        font-size: 13px;
-      }
-      input[type="text"], input[type="email"], input[type="number"] {
-        font-size: 14px;
-        padding: 10px;
-      }
-      button {
-        font-size: 14px;
-        padding: 12px 20px;
-        width: 100%;
-      }
-      .success-output p {
-        font-size: 13px;
-      }
-      .stat-box {
-        width: 100%;
-      }
+      margin-top: 5px;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="header-box">
-      <h1>Elaborador - Avaliação psicossocial</h1>
-      <p>Crie um formulário personalizado de avaliação de riscos psicossociais para sua empresa</p>
-    </div>
+    <h1>Sistema de Avaliação Psicossocial</h1>
     
-    <div id="setupForm">
-      <label class="input-label">Nome da sua empresa</label>
-      <input id="companyName" type="text" placeholder="Ex: MediQuo (sem LTDA ou outros complementos)">
+    <!-- Etapa 1: Informações iniciais -->
+    <div id="step1" class="step active">
+      <h2>Informações do Gestor</h2>
+      <p>Preencha os dados abaixo para configurar seu sistema de avaliação psicossocial.</p>
       
-      <label class="input-label">Número de respondentes esperados</label>
-      <input id="expectedResponses" type="number" min="5" placeholder="Ex: 14" value="10">
+      <div class="form-group">
+        <label for="emailGestor">Seu E-mail:</label>
+        <input type="email" id="emailGestor" placeholder="seu@email.com" required>
+        <div id="emailGestorError" class="error"></div>
+      </div>
       
-      <label class="input-label">E-mail para receber o relatório</label>
-      <input id="reportEmail" type="email" placeholder="seuemail@empresa.com">
+      <div class="form-group">
+        <label for="totalRespostas">Total de Respostas Esperadas:</label>
+        <input type="number" id="totalRespostas" min="5" placeholder="Ex: 15" required>
+        <div id="totalRespostasError" class="error"></div>
+      </div>
       
-      <button id="createBtn" onclick="createForm()">Criar Formulário</button>
-    </div>
-    
-    <div id="output" class="small-text"></div>
-    
-    <!-- Container para exibir o spinner e a barra de progresso -->
-    <div id="progressSection" style="display:none;">
-      <div class="spinner" id="spinner"></div>
-      <span id="progressText">0%</span>
-      <div class="progress-container">
-        <div class="progress-bar" id="progressBar">0%</div>
+      <div class="buttons">
+        <div></div> <!-- Espaçador -->
+        <button onclick="nextStep()">Próximo</button>
       </div>
     </div>
     
-    <!-- Dashboard do Gestor - Inicialmente oculto -->
-    <div id="dashboard" class="dashboard">
-      <div class="dashboard-title">Dashboard do Gestor</div>
+    <!-- Etapa 2: E-mails dos respondentes -->
+    <div id="step2" class="step">
+      <h2>E-mails dos Respondentes</h2>
+      <p>Adicione os e-mails dos colaboradores que responderão ao questionário.</p>
       
-      <div class="tab-container">
-        <div class="tab active" onclick="switchTab('overview')">Visão Geral</div>
-        <div class="tab" onclick="switchTab('responses')">Respostas</div>
+      <div class="form-group">
+        <label for="emailRespondente">E-mail do Respondente:</label>
+        <input type="email" id="emailRespondente" placeholder="colaborador@email.com">
+        <button onclick="adicionarEmail()" style="margin-top: 10px; width: 100%;">Adicionar E-mail</button>
       </div>
       
-      <div id="overview-tab">
-        <div class="stats-container">
-          <div class="stat-box">
-            <div class="stat-title">Formulário</div>
-            <div class="stat-value" id="formStatus">Ativo</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-title">Link do Formulário</div>
-            <div class="stat-value">
-              <button onclick="copyFormLink()" style="font-size: 12px; padding: 8px; margin: 0;">Copiar Link</button>
-            </div>
-          </div>
-        </div>
-        
-        <div class="response-progress">
-          <svg class="progress-circle" viewBox="0 0 100 100">
-            <circle class="progress-circle-bg" cx="50" cy="50" r="45" />
-            <circle class="progress-circle-value" id="responseCircle" cx="50" cy="50" r="45" stroke-dasharray="283" stroke-dashoffset="283" />
-          </svg>
-          <div class="progress-text">
-            <span id="currentResponses">0</span>/<span id="totalResponses">10</span>
-          </div>
-        </div>
-        
-        <div style="text-align: center; margin-bottom: 20px;">
-          <button id="refreshBtn" onclick="refreshResponses()" style="max-width: 200px;">Atualizar Respostas</button>
-        </div>
-        
-        <div style="text-align: center;">
-          <button id="generateReportBtn" onclick="generateReport()" disabled>Gerar Relatório</button>
-          <p class="small-text" id="reportStatus">O relatório só pode ser gerado após receber todas as respostas esperadas.</p>
-        </div>
+      <div class="form-group">
+        <label>E-mails Adicionados:</label>
+        <div id="emailsList" class="email-list"></div>
+        <div id="emailsError" class="error"></div>
       </div>
       
-      <div id="responses-tab" style="display: none;">
-        <div class="responses-container" id="responsesList">
-          <!-- Lista de respostas será preenchida dinamicamente -->
-          <div class="response-item">
-            <div class="response-name">Carregando respostas...</div>
-            <div class="response-email"></div>
-          </div>
-        </div>
+      <div class="buttons">
+        <button onclick="prevStep()" class="secondary">Voltar</button>
+        <button onclick="criarFormulario()">Criar Formulário</button>
+      </div>
+    </div>
+    
+    <!-- Etapa 3: Processando -->
+    <div id="step3" class="step">
+      <h2>Processando...</h2>
+      <div class="loading">
+        <div class="spinner"></div>
+        <p>Configurando seu sistema de avaliação psicossocial. Por favor, aguarde...</p>
+      </div>
+    </div>
+    
+    <!-- Etapa 4: Sucesso -->
+    <div id="step4" class="step">
+      <h2>Sistema Configurado com Sucesso!</h2>
+      
+      <div class="success-message">
+        <p>Seu sistema de avaliação psicossocial foi configurado com sucesso.</p>
+      </div>
+      
+      <div class="form-group">
+        <label>Link do Formulário:</label>
+        <div id="formLink" class="link-box"></div>
+        <p>Compartilhe este link com seus colaboradores para que eles possam responder ao questionário.</p>
+      </div>
+      
+      <div class="form-group">
+        <label>Link do Dashboard do Gestor:</label>
+        <div id="dashboardLink" class="link-box"></div>
+        <p>Este é o seu acesso ao dashboard de gestor. Guarde este link ou utilize o e-mail enviado para acessá-lo no futuro.</p>
+      </div>
+      
+      <div class="form-group">
+        <p><strong>Importante:</strong> Um e-mail com estes links foi enviado para o seu endereço de e-mail. Todos os respondentes também receberam os convites para participar da avaliação.</p>
+      </div>
+      
+      <div class="buttons">
+        <button onclick="iniciarNovo()" class="secondary">Iniciar Novo</button>
+        <button onclick="window.open(dashboardUrl, '_blank')">Abrir Dashboard</button>
       </div>
     </div>
   </div>
-  
+
   <script>
-    var progressInterval;
-    var startTime;
-    var formUrl = '';
-    var formId = '';
-    var expectedResponses = 10;
-    var currentResponses = 0;
+    // Variáveis globais
+    let currentStep = 1;
+    let emailsRespondentes = [];
+    let formUrl = '';
+    let dashboardUrl = '';
     
-    function startProgress() {
-      startTime = new Date().getTime();
-      document.getElementById("progressSection").style.display = "block";
-      progressInterval = setInterval(function() {
-        var elapsed = (new Date().getTime() - startTime) / 1000; // em segundos
-        var computed = Math.floor((elapsed / 46) * 99);
-        if (computed > 99) computed = 99;
-        updateProgress(computed);
-      }, 300);
-    }
-    
-    function updateProgress(value) {
-      document.getElementById("progressText").textContent = value + "%";
-      document.getElementById("progressBar").style.width = value + "%";
-      document.getElementById("progressBar").textContent = value + "%";
-    }
-    
-    function stopProgress() {
-      clearInterval(progressInterval);
-      updateProgress(100);
-    }
-    
-    // Função para exibir uma mensagem de sucesso do popup
-    function showSuccessMessage(message) {
-      var msgDiv = document.createElement('div');
-      msgDiv.className = 'success-message';
-      msgDiv.textContent = message;
-      document.body.appendChild(msgDiv);
-      setTimeout(function() {
-        msgDiv.remove();
-      }, 3000);
-    }
-    
-    // Função para copiar o link para a área de transferência
-    function copyLink(link) {
-      if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(link)
-          .then(function() {
-            showSuccessMessage("Link copiado com sucesso!");
-          })
-          .catch(function(err) {
-            showSuccessMessage("Erro ao copiar o link: " + err);
-          });
-      } else {
-        var textArea = document.createElement("textarea");
-        textArea.value = link;
-        textArea.style.position = "fixed";
-        textArea.style.top = "-9999px";
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-        try {
-          document.execCommand('copy');
-          showSuccessMessage("Link copiado com sucesso!");
-        } catch (err) {
-          showSuccessMessage("Erro ao copiar o link: " + err);
+    // Função para avançar para o próximo passo
+    function nextStep() {
+      if (currentStep === 1) {
+        // Validar dados do gestor
+        const emailGestor = document.getElementById('emailGestor').value;
+        const totalRespostas = document.getElementById('totalRespostas').value;
+        
+        let valid = true;
+        
+        if (!emailGestor || !validateEmail(emailGestor)) {
+          document.getElementById('emailGestorError').textContent = 'Por favor, insira um e-mail válido.';
+          valid = false;
+        } else {
+          document.getElementById('emailGestorError').textContent = '';
         }
-        document.body.removeChild(textArea);
-      }
-    }
-    
-    function copyFormLink() {
-      copyLink(formUrl);
-    }
-    
-    // Função que chama a função do Apps Script e gerencia o progresso
-    function createForm() {
-      var companyName = document.getElementById("companyName").value;
-      var reportEmail = document.getElementById("reportEmail").value;
-      expectedResponses = parseInt(document.getElementById("expectedResponses").value) || 10;
-      
-      if (!companyName) {
-        showSuccessMessage("Por favor, informe o nome da empresa.");
-        return;
-      }
-      
-      if (!reportEmail || !reportEmail.includes('@')) {
-        showSuccessMessage("Por favor, informe um e-mail válido.");
-        return;
-      }
-      
-      document.getElementById("createBtn").disabled = true;
-      document.getElementById("output").innerHTML = "";
-      startProgress();
-      
-      google.script.run
-        .withSuccessHandler(function(result) {
-          stopProgress();
-          
-          // Salvando o URL e ID do formulário
-          formUrl = result.url;
-          formId = result.formId;
-          
-          // Mostrar sucesso e exibir dashboard
-          var html = "<div class='success-output'>" +
-                     "<p>Formulário criado com sucesso!</p>" +
-                     "<p>Acesse o dashboard abaixo para monitorar as respostas e gerar o relatório.</p>" +
-                     "</div>";
-          document.getElementById("output").innerHTML = html;
-          
-          // Atualiza o dashboard e exibe
-          document.getElementById("totalResponses").textContent = expectedResponses;
-          document.getElementById("dashboard").style.display = "block";
-          document.getElementById("setupForm").style.display = "none";
-          
-          // Salvar configurações no script server-side
-          saveSettings(companyName, expectedResponses, reportEmail, formId);
-          
-          // Iniciar verificação periódica de respostas
-          refreshResponses();
-        })
-        .withFailureHandler(function(error) {
-          stopProgress();
-          document.getElementById("output").innerHTML =
-            "Erro ao criar formulário: " + error;
-          document.getElementById("createBtn").disabled = false;
-        })
-        .createPsychosocialRiskForm(companyName);
-    }
-    
-    function saveSettings(companyName, expectedResponses, reportEmail, formId) {
-      google.script.run
-        .withSuccessHandler(function() {
-          console.log("Configurações salvas com sucesso");
-        })
-        .withFailureHandler(function(error) {
-          console.error("Erro ao salvar configurações:", error);
-        })
-        .saveFormSettings(companyName, expectedResponses, reportEmail, formId);
-    }
-    
-    function refreshResponses() {
-      if (!formId) {
-        showSuccessMessage("Formulário não encontrado. Crie um novo formulário.");
-        return;
-      }
-      
-      document.getElementById("refreshBtn").disabled = true;
-      
-      google.script.run
-        .withSuccessHandler(function(responses) {
-          document.getElementById("refreshBtn").disabled = false;
-          
-          // Atualizar contador de respostas
-          currentResponses = responses.length;
-          document.getElementById("currentResponses").textContent = currentResponses;
-          
-          // Atualizar círculo de progresso
-          updateResponseCircle(currentResponses, expectedResponses);
-          
-          // Preencher lista de respostas
-          updateResponsesList(responses);
-          
-          // Verificar se pode habilitar o botão de gerar relatório
-          if (currentResponses >= expectedResponses) {
-            document.getElementById("generateReportBtn").disabled = false;
-            document.getElementById("reportStatus").textContent = "Todas as respostas foram recebidas. Você pode gerar o relatório agora.";
-          } else {
-            document.getElementById("generateReportBtn").disabled = true;
-            document.getElementById("reportStatus").textContent = `O relatório só pode ser gerado após receber todas as ${expectedResponses} respostas esperadas. (Faltam ${expectedResponses - currentResponses})`;
-          }
-        })
-        .withFailureHandler(function(error) {
-          document.getElementById("refreshBtn").disabled = false;
-          showSuccessMessage("Erro ao atualizar respostas: " + error);
-        })
-        .getFormResponses(formId);
-    }
-    
-    function updateResponseCircle(current, total) {
-      const circle = document.getElementById('responseCircle');
-      const circumference = 2 * Math.PI * 45; // 2πr, onde r = 45
-      
-      let percentage = (current / total);
-      if (percentage > 1) percentage = 1;
-      
-      const dashOffset = circumference * (1 - percentage);
-      circle.style.strokeDashoffset = dashOffset;
-      circle.style.strokeDasharray = `${circumference}`;
-    }
-    
-    function updateResponsesList(responses) {
-      const container = document.getElementById('responsesList');
-      container.innerHTML = '';
-      
-      if (responses.length === 0) {
-        container.innerHTML = '<div class="response-item"><div class="response-name">Nenhuma resposta recebida ainda</div></div>';
-        return;
-      }
-      
-      responses.forEach(function(response) {
-        const item = document.createElement('div');
-        item.className = 'response-item';
         
-        const name = document.createElement('div');
-        name.className = 'response-name';
-        name.textContent = response.name || 'Nome não informado';
+        if (!totalRespostas || totalRespostas < 5) {
+          document.getElementById('totalRespostasError').textContent = 'Por favor, insira um número válido (mínimo 5).';
+          valid = false;
+        } else {
+          document.getElementById('totalRespostasError').textContent = '';
+        }
         
-        const email = document.createElement('div');
-        email.className = 'response-email';
-        email.textContent = response.email || 'E-mail não informado';
-        
-        item.appendChild(name);
-        item.appendChild(email);
-        container.appendChild(item);
+        if (!valid) return;
+      }
+      
+      // Esconder passo atual
+      document.getElementById(`step${currentStep}`).classList.remove('active');
+      
+      // Mostrar próximo passo
+      currentStep++;
+      document.getElementById(`step${currentStep}`).classList.add('active');
+    }
+    
+    // Função para voltar ao passo anterior
+    function prevStep() {
+      // Esconder passo atual
+      document.getElementById(`step${currentStep}`).classList.remove('active');
+      
+      // Mostrar passo anterior
+      currentStep--;
+      document.getElementById(`step${currentStep}`).classList.add('active');
+    }
+    
+    // Função para validar e-mail
+    function validateEmail(email) {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(String(email).toLowerCase());
+    }
+    
+    // Função para adicionar e-mail à lista
+    function adicionarEmail() {
+      const emailInput = document.getElementById('emailRespondente');
+      const email = emailInput.value.trim();
+      
+      if (email && validateEmail(email)) {
+        if (!emailsRespondentes.includes(email)) {
+          emailsRespondentes.push(email);
+          renderEmails();
+          emailInput.value = '';
+        } else {
+          alert('Este e-mail já foi adicionado.');
+        }
+      } else {
+        alert('Por favor, insira um e-mail válido.');
+      }
+    }
+    
+    // Função para remover e-mail da lista
+    function removerEmail(index) {
+      emailsRespondentes.splice(index, 1);
+      renderEmails();
+    }
+    
+    // Função para renderizar a lista de e-mails
+    function renderEmails() {
+      const emailsList = document.getElementById('emailsList');
+      emailsList.innerHTML = '';
+      
+      if (emailsRespondentes.length === 0) {
+        emailsList.innerHTML = '<p>Nenhum e-mail adicionado.</p>';
+        return;
+      }
+      
+      emailsRespondentes.forEach((email, index) => {
+        const tag = document.createElement('div');
+        tag.className = 'email-tag';
+        tag.innerHTML = `
+          ${email} 
+          <button onclick="removerEmail(${index})">×</button>
+        `;
+        emailsList.appendChild(tag);
       });
     }
     
-    function generateReport() {
-      if (currentResponses < expectedResponses) {
-        showSuccessMessage(`Aguarde todas as ${expectedResponses} respostas antes de gerar o relatório.`);
+    // Função para criar o formulário e iniciar o processo
+    function criarFormulario() {
+      const emailGestor = document.getElementById('emailGestor').value;
+      const totalRespostas = parseInt(document.getElementById('totalRespostas').value);
+      
+      // Validar se há e-mails suficientes
+      if (emailsRespondentes.length < totalRespostas) {
+        document.getElementById('emailsError').textContent = `Você definiu ${totalRespostas} respostas esperadas, mas adicionou apenas ${emailsRespondentes.length} e-mails.`;
         return;
+      } else {
+        document.getElementById('emailsError').textContent = '';
       }
       
-      document.getElementById("generateReportBtn").disabled = true;
-      document.getElementById("reportStatus").textContent = "Gerando relatório...";
+      // Avançar para a tela de processamento
+      nextStep();
       
+      // Chamar a função do Apps Script
       google.script.run
-        .withSuccessHandler(function(result) {
-          document.getElementById("generateReportBtn").disabled = false;
-          if (result.success) {
-            document.getElementById("reportStatus").textContent = `Relatório enviado com sucesso para o e-mail cadastrado.`;
-            showSuccessMessage("Relatório enviado com sucesso!");
-          } else {
-            document.getElementById("reportStatus").textContent = `Erro ao gerar relatório: ${result.error}`;
-            showSuccessMessage("Erro ao gerar relatório");
-          }
-        })
-        .withFailureHandler(function(error) {
-          document.getElementById("generateReportBtn").disabled = false;
-          document.getElementById("reportStatus").textContent = `Erro ao gerar relatório: ${error}`;
-          showSuccessMessage("Erro ao gerar relatório");
-        })
-        .generatePsychosocialReport(formId);
+        .withSuccessHandler(onSuccess)
+        .withFailureHandler(onFailure)
+        .iniciarProcesso(emailGestor, totalRespostas, emailsRespondentes);
     }
     
-    function switchTab(tabName) {
-      const tabs = document.querySelectorAll('.tab');
-      tabs.forEach(tab => tab.classList.remove('active'));
+    // Função para lidar com o sucesso
+    function onSuccess(result) {
+      formUrl = result.formUrl;
+      dashboardUrl = result.dashboardUrl;
       
-      const tabButton = document.querySelector(`.tab[onclick="switchTab('${tabName}')"]`);
-      if (tabButton) tabButton.classList.add('active');
+      // Preencher os links
+      document.getElementById('formLink').textContent = formUrl;
+      document.getElementById('dashboardLink').textContent = dashboardUrl;
       
-      document.getElementById('overview-tab').style.display = tabName === 'overview' ? 'block' : 'none';
-      document.getElementById('responses-tab').style.display = tabName === 'responses' ? 'block' : 'none';
+      // Avançar para a tela de sucesso
+      nextStep();
     }
+    
+    // Função para lidar com falhas
+    function onFailure(error) {
+      alert('Ocorreu um erro: ' + error.message);
+      prevStep();
+    }
+    
+    // Função para iniciar um novo processo
+    function iniciarNovo() {
+      // Limpar dados
+      document.getElementById('emailGestor').value = '';
+      document.getElementById('totalRespostas').value = '';
+      emailsRespondentes = [];
+      renderEmails();
+      
+      // Voltar para o primeiro passo
+      document.getElementById(`step${currentStep}`).classList.remove('active');
+      currentStep = 1;
+      document.getElementById(`step${currentStep}`).classList.add('active');
+    }
+    
+    // Inicializar a renderização de e-mails
+    renderEmails();
   </script>
 </body>
 </html>
