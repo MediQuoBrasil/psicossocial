@@ -2,8 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <!-- Viewport para responsividade -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
   <title>Elaborador - Avaliação psicossocial</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
@@ -11,30 +10,34 @@
     body {
       font-family: 'Inter', sans-serif;
       margin: 0;
-      padding: 20px;
+      padding: 10px;
       background-color: #491E9C;
       color: #202124;
       display: flex;
       flex-direction: column;
       align-items: center;
+      width: 100%;
+      box-sizing: border-box;
     }
     .container {
       width: 100%;
       max-width: 768px;
       margin: 0 auto;
+      padding: 0;
+      box-sizing: border-box;
     }
     /* Caixa branca para título e instrução */
     .header-box {
       background: white;
       border-radius: 8px;
-      padding: 10px 20px;
+      padding: 15px;
       box-sizing: border-box;
       margin-bottom: 16px;
       width: 100%;
       text-align: center;
     }
     .header-box h1 {
-      margin: 0 0 16px; /* Espaço para separar o título da instrução */
+      margin: 0 0 16px;
       font-size: 18pt;
       font-weight: 700;
       color: #491E9C;
@@ -46,7 +49,7 @@
       text-align: justify;
     }
     /* Input */
-    input[type="text"] {
+    input[type="text"], input[type="email"], input[type="number"] {
       width: 100%;
       padding: 12px;
       border: 1px solid rgba(73, 30, 156, 0.3);
@@ -56,10 +59,18 @@
       transition: border-color 0.3s ease;
       margin-bottom: 16px;
     }
-    input[type="text"]:focus {
+    input[type="text"]:focus, input[type="email"]:focus, input[type="number"]:focus {
       outline: none;
       border-color: #491E9C;
       box-shadow: 0 0 0 2px rgba(73, 30, 156, 0.1);
+    }
+    /* Label para os inputs */
+    .input-label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      color: white;
     }
     /* Botões com efeito animado */
     button {
@@ -78,10 +89,18 @@
       cursor: pointer;
       display: block;
       margin: 16px auto;
+      width: 100%;
+      max-width: 300px;
     }
     button:hover {
       transform: translateY(-2px);
       box-shadow: 0px 7px 20px rgba(0, 0, 0, 0.15);
+    }
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
     }
     /* Spinner e barra de progresso */
     .spinner {
@@ -101,7 +120,7 @@
     }
     .progress-container {
       width: 100%;
-      background-color: #d9d2e9; /* Fundo da barra: roxa clara */
+      background-color: #d9d2e9;
       border-radius: 4px;
       overflow: hidden;
       margin-top: 10px;
@@ -109,9 +128,9 @@
     .progress-bar {
       height: 20px;
       width: 0%;
-      background-color: #ffffff; /* Progresso: branco */
+      background-color: #ffffff;
       text-align: center;
-      color: #000000; /* Porcentagem: preta */
+      color: #000000;
       line-height: 20px;
       transition: width 0.3s ease;
     }
@@ -131,6 +150,7 @@
     .small-text {
       font-size: 12px;
       text-align: center;
+      width: 100%;
     }
     /* Bloco de mensagem com fundo branco (somente o texto) */
     .success-output {
@@ -140,11 +160,13 @@
       text-align: center;
       color: #202124;
       margin: 16px auto;
-      max-width: 768px;
+      width: 100%;
+      box-sizing: border-box;
     }
     .success-output p {
       font-weight: bold;
       margin: 8px 0;
+      word-wrap: break-word;
     }
     /* Estilo para a mensagem de sucesso do popup (copiar link) */
     .success-message {
@@ -161,25 +183,168 @@
       font-weight: bold;
       z-index: 1000;
       text-align: center;
+      width: 80%;
+      max-width: 300px;
+      box-sizing: border-box;
     }
+    hr {
+      width: 100%;
+      border: 0;
+      height: 1px;
+      background: rgba(255,255,255,0.3);
+      margin: 20px 0;
+    }
+    
+    /* Estilos para o dashboard do gestor */
+    .dashboard {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 20px;
+      width: 100%;
+      box-sizing: border-box;
+      display: none;
+    }
+    .dashboard-title {
+      font-size: 16pt;
+      font-weight: 600;
+      color: #491E9C;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    .stats-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .stat-box {
+      background: #f8f9fa;
+      border-radius: 6px;
+      padding: 15px;
+      width: 48%;
+      margin-bottom: 15px;
+      box-sizing: border-box;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .stat-title {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 5px;
+    }
+    .stat-value {
+      font-size: 22px;
+      font-weight: 600;
+      color: #491E9C;
+    }
+    .responses-container {
+      max-height: 300px;
+      overflow-y: auto;
+      margin-bottom: 20px;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+    }
+    .response-item {
+      padding: 12px;
+      border-bottom: 1px solid #e0e0e0;
+      display: flex;
+      justify-content: space-between;
+    }
+    .response-item:last-child {
+      border-bottom: none;
+    }
+    .response-name {
+      font-weight: 500;
+    }
+    .response-email {
+      color: #666;
+      font-size: 14px;
+    }
+    .tab-container {
+      display: flex;
+      border-bottom: 1px solid #e0e0e0;
+      margin-bottom: 15px;
+    }
+    .tab {
+      padding: 10px 15px;
+      cursor: pointer;
+      background: #f1f1f1;
+      border-radius: 6px 6px 0 0;
+      margin-right: 5px;
+      transition: all 0.2s ease;
+    }
+    .tab.active {
+      background: #491E9C;
+      color: white;
+    }
+    
+    /* Progress circle for responses */
+    .response-progress {
+      position: relative;
+      width: 150px;
+      height: 150px;
+      margin: 0 auto 20px;
+    }
+    .progress-circle {
+      transform: rotate(-90deg);
+      width: 100%;
+      height: 100%;
+    }
+    .progress-circle-bg {
+      fill: none;
+      stroke: #e0e0e0;
+      stroke-width: 10;
+    }
+    .progress-circle-value {
+      fill: none;
+      stroke: #491E9C;
+      stroke-width: 10;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.5s ease;
+    }
+    .progress-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 24px;
+      font-weight: 600;
+      color: #491E9C;
+    }
+    
     /* Ajustes para mobile */
     @media (max-width:600px) {
+      body {
+        padding: 10px;
+      }
       .container {
-        padding: 10px;
+        width: 100%;
+        padding: 0;
       }
-      .header-box, .success-output {
-        padding: 10px;
+      .header-box {
+        padding: 12px;
       }
-      input[type="text"] {
+      .header-box h1 {
+        font-size: 16pt;
+      }
+      .header-box p {
+        font-size: 13px;
+      }
+      input[type="text"], input[type="email"], input[type="number"] {
         font-size: 14px;
         padding: 10px;
       }
       button {
         font-size: 14px;
         padding: 12px 20px;
+        width: 100%;
       }
       .success-output p {
-        font-size: 14px;
+        font-size: 13px;
+      }
+      .stat-box {
+        width: 100%;
       }
     }
   </style>
@@ -188,11 +353,22 @@
   <div class="container">
     <div class="header-box">
       <h1>Elaborador - Avaliação psicossocial</h1>
-      <p>Informe o nome da sua empresa no campo abaixo: (Ex: Mediquo Saúde Conectada Ltda, escrever apenas: MediQuo)</p>
+      <p>Crie um formulário personalizado de avaliação de riscos psicossociais para sua empresa</p>
     </div>
-    <input id="companyName" type="text" placeholder="Nome da sua empresa">
-    <button id="createBtn" onclick="createForm()">Criar Formulário</button>
-    <hr>
+    
+    <div id="setupForm">
+      <label class="input-label">Nome da sua empresa</label>
+      <input id="companyName" type="text" placeholder="Ex: MediQuo (sem LTDA ou outros complementos)">
+      
+      <label class="input-label">Número de respondentes esperados</label>
+      <input id="expectedResponses" type="number" min="5" placeholder="Ex: 14" value="10">
+      
+      <label class="input-label">E-mail para receber o relatório</label>
+      <input id="reportEmail" type="email" placeholder="seuemail@empresa.com">
+      
+      <button id="createBtn" onclick="createForm()">Criar Formulário</button>
+    </div>
+    
     <div id="output" class="small-text"></div>
     
     <!-- Container para exibir o spinner e a barra de progresso -->
@@ -203,11 +379,69 @@
         <div class="progress-bar" id="progressBar">0%</div>
       </div>
     </div>
+    
+    <!-- Dashboard do Gestor - Inicialmente oculto -->
+    <div id="dashboard" class="dashboard">
+      <div class="dashboard-title">Dashboard do Gestor</div>
+      
+      <div class="tab-container">
+        <div class="tab active" onclick="switchTab('overview')">Visão Geral</div>
+        <div class="tab" onclick="switchTab('responses')">Respostas</div>
+      </div>
+      
+      <div id="overview-tab">
+        <div class="stats-container">
+          <div class="stat-box">
+            <div class="stat-title">Formulário</div>
+            <div class="stat-value" id="formStatus">Ativo</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-title">Link do Formulário</div>
+            <div class="stat-value">
+              <button onclick="copyFormLink()" style="font-size: 12px; padding: 8px; margin: 0;">Copiar Link</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="response-progress">
+          <svg class="progress-circle" viewBox="0 0 100 100">
+            <circle class="progress-circle-bg" cx="50" cy="50" r="45" />
+            <circle class="progress-circle-value" id="responseCircle" cx="50" cy="50" r="45" stroke-dasharray="283" stroke-dashoffset="283" />
+          </svg>
+          <div class="progress-text">
+            <span id="currentResponses">0</span>/<span id="totalResponses">10</span>
+          </div>
+        </div>
+        
+        <div style="text-align: center; margin-bottom: 20px;">
+          <button id="refreshBtn" onclick="refreshResponses()" style="max-width: 200px;">Atualizar Respostas</button>
+        </div>
+        
+        <div style="text-align: center;">
+          <button id="generateReportBtn" onclick="generateReport()" disabled>Gerar Relatório</button>
+          <p class="small-text" id="reportStatus">O relatório só pode ser gerado após receber todas as respostas esperadas.</p>
+        </div>
+      </div>
+      
+      <div id="responses-tab" style="display: none;">
+        <div class="responses-container" id="responsesList">
+          <!-- Lista de respostas será preenchida dinamicamente -->
+          <div class="response-item">
+            <div class="response-name">Carregando respostas...</div>
+            <div class="response-email"></div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   
   <script>
     var progressInterval;
     var startTime;
+    var formUrl = '';
+    var formId = '';
+    var expectedResponses = 10;
+    var currentResponses = 0;
     
     function startProgress() {
       startTime = new Date().getTime();
@@ -231,7 +465,7 @@
       updateProgress(100);
     }
     
-    // Função para exibir uma mensagem de sucesso do popup (cópia do link)
+    // Função para exibir uma mensagem de sucesso do popup
     function showSuccessMessage(message) {
       var msgDiv = document.createElement('div');
       msgDiv.className = 'success-message';
@@ -270,31 +504,190 @@
       }
     }
     
+    function copyFormLink() {
+      copyLink(formUrl);
+    }
+    
     // Função que chama a função do Apps Script e gerencia o progresso
     function createForm() {
+      var companyName = document.getElementById("companyName").value;
+      var reportEmail = document.getElementById("reportEmail").value;
+      expectedResponses = parseInt(document.getElementById("expectedResponses").value) || 10;
+      
+      if (!companyName) {
+        showSuccessMessage("Por favor, informe o nome da empresa.");
+        return;
+      }
+      
+      if (!reportEmail || !reportEmail.includes('@')) {
+        showSuccessMessage("Por favor, informe um e-mail válido.");
+        return;
+      }
+      
       document.getElementById("createBtn").disabled = true;
       document.getElementById("output").innerHTML = "";
       startProgress();
-      var companyName = document.getElementById("companyName").value;
+      
       google.script.run
-        .withSuccessHandler(function(url) {
+        .withSuccessHandler(function(result) {
           stopProgress();
-          // A mensagem de sucesso com fundo branco abrange somente o texto
+          
+          // Salvando o URL e ID do formulário
+          formUrl = result.url;
+          formId = result.formId;
+          
+          // Mostrar sucesso e exibir dashboard
           var html = "<div class='success-output'>" +
                      "<p>Formulário criado com sucesso!</p>" +
-                     "<p>Clique no botão abaixo para copiar o link (<strong>" + url + "</strong>) que os colaboradores irão acessar</p>" +
-                     "</div>" +
-                     "<button class='copy-btn' onclick='copyLink(\"" + url + "\")'>COPIAR LINK</button>";
+                     "<p>Acesse o dashboard abaixo para monitorar as respostas e gerar o relatório.</p>" +
+                     "</div>";
           document.getElementById("output").innerHTML = html;
-          document.getElementById("createBtn").disabled = false;
+          
+          // Atualiza o dashboard e exibe
+          document.getElementById("totalResponses").textContent = expectedResponses;
+          document.getElementById("dashboard").style.display = "block";
+          document.getElementById("setupForm").style.display = "none";
+          
+          // Salvar configurações no script server-side
+          saveSettings(companyName, expectedResponses, reportEmail, formId);
+          
+          // Iniciar verificação periódica de respostas
+          refreshResponses();
         })
         .withFailureHandler(function(error) {
           stopProgress();
           document.getElementById("output").innerHTML =
-            "Erro ao criar formulário: " + error.message;
+            "Erro ao criar formulário: " + error;
           document.getElementById("createBtn").disabled = false;
         })
         .createPsychosocialRiskForm(companyName);
+    }
+    
+    function saveSettings(companyName, expectedResponses, reportEmail, formId) {
+      google.script.run
+        .withSuccessHandler(function() {
+          console.log("Configurações salvas com sucesso");
+        })
+        .withFailureHandler(function(error) {
+          console.error("Erro ao salvar configurações:", error);
+        })
+        .saveFormSettings(companyName, expectedResponses, reportEmail, formId);
+    }
+    
+    function refreshResponses() {
+      if (!formId) {
+        showSuccessMessage("Formulário não encontrado. Crie um novo formulário.");
+        return;
+      }
+      
+      document.getElementById("refreshBtn").disabled = true;
+      
+      google.script.run
+        .withSuccessHandler(function(responses) {
+          document.getElementById("refreshBtn").disabled = false;
+          
+          // Atualizar contador de respostas
+          currentResponses = responses.length;
+          document.getElementById("currentResponses").textContent = currentResponses;
+          
+          // Atualizar círculo de progresso
+          updateResponseCircle(currentResponses, expectedResponses);
+          
+          // Preencher lista de respostas
+          updateResponsesList(responses);
+          
+          // Verificar se pode habilitar o botão de gerar relatório
+          if (currentResponses >= expectedResponses) {
+            document.getElementById("generateReportBtn").disabled = false;
+            document.getElementById("reportStatus").textContent = "Todas as respostas foram recebidas. Você pode gerar o relatório agora.";
+          } else {
+            document.getElementById("generateReportBtn").disabled = true;
+            document.getElementById("reportStatus").textContent = `O relatório só pode ser gerado após receber todas as ${expectedResponses} respostas esperadas. (Faltam ${expectedResponses - currentResponses})`;
+          }
+        })
+        .withFailureHandler(function(error) {
+          document.getElementById("refreshBtn").disabled = false;
+          showSuccessMessage("Erro ao atualizar respostas: " + error);
+        })
+        .getFormResponses(formId);
+    }
+    
+    function updateResponseCircle(current, total) {
+      const circle = document.getElementById('responseCircle');
+      const circumference = 2 * Math.PI * 45; // 2πr, onde r = 45
+      
+      let percentage = (current / total);
+      if (percentage > 1) percentage = 1;
+      
+      const dashOffset = circumference * (1 - percentage);
+      circle.style.strokeDashoffset = dashOffset;
+      circle.style.strokeDasharray = `${circumference}`;
+    }
+    
+    function updateResponsesList(responses) {
+      const container = document.getElementById('responsesList');
+      container.innerHTML = '';
+      
+      if (responses.length === 0) {
+        container.innerHTML = '<div class="response-item"><div class="response-name">Nenhuma resposta recebida ainda</div></div>';
+        return;
+      }
+      
+      responses.forEach(function(response) {
+        const item = document.createElement('div');
+        item.className = 'response-item';
+        
+        const name = document.createElement('div');
+        name.className = 'response-name';
+        name.textContent = response.name || 'Nome não informado';
+        
+        const email = document.createElement('div');
+        email.className = 'response-email';
+        email.textContent = response.email || 'E-mail não informado';
+        
+        item.appendChild(name);
+        item.appendChild(email);
+        container.appendChild(item);
+      });
+    }
+    
+    function generateReport() {
+      if (currentResponses < expectedResponses) {
+        showSuccessMessage(`Aguarde todas as ${expectedResponses} respostas antes de gerar o relatório.`);
+        return;
+      }
+      
+      document.getElementById("generateReportBtn").disabled = true;
+      document.getElementById("reportStatus").textContent = "Gerando relatório...";
+      
+      google.script.run
+        .withSuccessHandler(function(result) {
+          document.getElementById("generateReportBtn").disabled = false;
+          if (result.success) {
+            document.getElementById("reportStatus").textContent = `Relatório enviado com sucesso para o e-mail cadastrado.`;
+            showSuccessMessage("Relatório enviado com sucesso!");
+          } else {
+            document.getElementById("reportStatus").textContent = `Erro ao gerar relatório: ${result.error}`;
+            showSuccessMessage("Erro ao gerar relatório");
+          }
+        })
+        .withFailureHandler(function(error) {
+          document.getElementById("generateReportBtn").disabled = false;
+          document.getElementById("reportStatus").textContent = `Erro ao gerar relatório: ${error}`;
+          showSuccessMessage("Erro ao gerar relatório");
+        })
+        .generatePsychosocialReport(formId);
+    }
+    
+    function switchTab(tabName) {
+      const tabs = document.querySelectorAll('.tab');
+      tabs.forEach(tab => tab.classList.remove('active'));
+      
+      const tabButton = document.querySelector(`.tab[onclick="switchTab('${tabName}')"]`);
+      if (tabButton) tabButton.classList.add('active');
+      
+      document.getElementById('overview-tab').style.display = tabName === 'overview' ? 'block' : 'none';
+      document.getElementById('responses-tab').style.display = tabName === 'responses' ? 'block' : 'none';
     }
   </script>
 </body>
